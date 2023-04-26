@@ -6,4 +6,8 @@ public interface UtilObject {
 		return object == null;
 	}
 	
+	static <O> O getDefault(final O object, final O defaultValue) {
+		return isNull(object) ? defaultValue : object;
+	}
+	
 }
