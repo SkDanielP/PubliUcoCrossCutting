@@ -41,6 +41,18 @@ public final class UtilText {
 		return getDefault(text, EMPTY);
 	}
 	
+	public final boolean isEmpty(final String text) {
+	return getDefault(text).equals(EMPTY);
+	
+	}
+	public final String getDefaultEmpty(final String text, final String defaultValue) {
+
+		
+		return isEmpty(text) ? getDefault(defaultValue): text;
+		
+	}
+	
+	
 	public final String getDefaultValue() {
 		return EMPTY;
 	}
