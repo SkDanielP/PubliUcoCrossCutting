@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import co.edu.uco.publiuco.crosscutting.exception.PubliucoCrossCuttingException;
+import co.edu.uco.publiuco.crosscutting.utils.Messages.UtilSqlMessages;
 
 public final class UtilSql {
 	
@@ -13,24 +14,24 @@ public final class UtilSql {
 	
 	public static boolean connectionIsOpen(final Connection connection) {
 		if(UtilObject.isNull(connection)) {
-			var userMessage = "Se ha presentado un problema tratando de  validar si una conexion con la fuente de informacion estaba o no abierta";
-			var technicalMessage = "Se ha presentado una excepcion de tipo SQLException tratando de validar si la conexion estaba o no abierta. Por favor valida la traza de errores completa de la excepcion presentada...";
+			var userMessage = UtilSqlMessages.CONNECTION_IS_OPEN_USER_MESSAGE;
+			var technicalMessage = UtilSqlMessages.CONNECTION_IS_OPEN_TECHNICAL_NULL_CONNECTION;
 			throw PubliucoCrossCuttingException.create("NO ES POSIBLE VALIDAR SI UNA CONEXION ESTA ABUERTA CUANDO SE ENCUENTRA NULA...");
 		}
 		
 		try {
 			return !connection.isClosed();
-		} catch (final Exception exception) {
-			var userMessage = "Se ha presentado un problema tratando de  validar si una conexion con la fuente de informacion estaba o no abierta";
-			var technicalMessage = "Se ha presentado una excepcion de tipo SQLException tratando de validar si la conexion estaba o no abierta. Por favor valida la traza de errores completa de la excepcion presentada...";
+		} catch (final SQLException exception) {
+			var userMessage = UtilSqlMessages.CONNECTION_IS_OPEN_USER_MESSAGE;
+			var technicalMessage = UtilSqlMessages.CONNECTION_IS_OPEN_TECHNICAL_SQL_EXCEPTION;
 			
 			throw PubliucoCrossCuttingException.create(technicalMessage, userMessage, exception);
 			
 		}
 		
 		catch (final Exception exception) {
-			var userMessage = "Se ha presentado un problema tratando de  validar si una conexion con la fuente de informacion estaba o no abierta";
-			var technicalMessage = "Se ha presentado una excepcion de tipo SQLException tratando de validar si la conexion estaba o no abierta. Por favor valida la traza de errores completa de la excepcion presentada...";
+			var userMessage = UtilSqlMessages.CONNECTION_IS_OPEN_USER_MESSAGE;
+			var technicalMessage = UtilSqlMessages.CONNECTION_IS_OPEN_TECHNICAL_EXCEPTION;
 			
 			throw PubliucoCrossCuttingException.create(technicalMessage, userMessage, exception);
 			
@@ -39,13 +40,25 @@ public final class UtilSql {
 	}
 	
 	public static void closeConnection(final Connection connection) {
-		if(!connectionIsOpen(connection)) {
-			try {
+		try {
+			if(!connectionIsOpen(connection)) {
 				connection.close();
-			} catch (SQLException exception) {
-				e.printStackTrace();
+			} 
+		}catch (final SQLException exception){
+				var userMessage = UtilSqlMessages.CONNECTION_IS_OPEN_USER_MESSAGE;
+				var technicalMessage = UtilSqlMessages.CONNECTION_IS_OPEN_TECHNICAL_SQL_EXCEPTION;
+				
+				throw PubliucoCrossCuttingException.create(technicalMessage, userMessage, exception);
+				
 			}
-		}
+			
+			catch (final Exception exception) {
+				var userMessage = UtilSqlMessages.CONNECTION_IS_OPEN_USER_MESSAGE;
+				var technicalMessage = UtilSqlMessages.CONNECTION_IS_OPEN_TECHNICAL_EXCEPTION;
+				
+				throw PubliucoCrossCuttingException.create(technicalMessage, userMessage, exception);
+				
+			}
 	}
 
 }
